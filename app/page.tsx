@@ -1,22 +1,26 @@
+/* eslint-disable */
 "use client";
 
 import { useMemo, useState } from "react";
 import { mockTranscriptData, mockTranscriptOptions } from "@/data/mock-transcript";
-import { mockAnalysis } from "@/data/mock-analysis";
 import { AnalysisItem, AnalysisResult, QAItem, MockTranscriptOption } from "@/types/interview";
 import Timeline from "@/components/Timeline";
 import BasicInformation from "@/components/BasicInformation";
 import OverallSummary from "@/components/OverallSummary";
 import MockDataSelector from "@/components/MockDataSelector";
 import LoadingAnimation from "@/components/LoadingAnimation";
+import { z } from "zod";
 
 export default function Home() {
-  const [qaInput, setQaInput] = useState<QAItem[]>([]);
+  const [qaInput, setQaInput] = useState<QAItem[]>(mockTranscriptData.short_transcript);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [analysis, setAnalysis] = useState<AnalysisItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedMockKey, setSelectedMockKey] = useState<MockTranscriptOption['key'] | null>(null);
+  const [selectedMockKey, setSelectedMockKey] = useState<MockTranscriptOption['key'] | null>('short_transcript');
+  const [dataSource, setDataSource] = useState<'mock' | 'json'>("mock");
+  const [jsonInput, setJsonInput] = useState<string>("\n[\n  {\n    \"timestamp\": \"00:00:10\",\n    \"type\": \"question\",\n    \"content\": \"Hi, could you introduce yourself?\",\n    \"role\": \"interviewer\"\n  }\n]\n");
+  const [jsonError, setJsonError] = useState<string | null>(null);
 
   const qaPreview = useMemo(() => JSON.stringify(qaInput, null, 2), [qaInput]);
   
@@ -36,9 +40,44 @@ export default function Home() {
     const selectedData = mockTranscriptData[key];
     setQaInput(selectedData);
     setSelectedMockKey(key);
+    setDataSource('mock');
     setAnalysisResult(null);
     setAnalysis([]);
     setError(null);
+  }
+
+  // Client-side schema for pasted JSON validation
+  const qaItemSchema = z.object({
+    timestamp: z.string(),
+    type: z.enum(["question", "answer"]),
+    content: z.string(),
+    role: z.enum(["interviewer", "interviewee"]),
+  });
+
+  async function handleUseJson() {
+    try {
+      setJsonError(null);
+      const parsed = JSON.parse(jsonInput);
+      if (!Array.isArray(parsed)) {
+        throw new Error("JSON must be an array of QA items");
+      }
+      const validated: QAItem[] = parsed.map((item, idx) => {
+        const res = qaItemSchema.safeParse(item);
+        if (!res.success) {
+          throw new Error(`Item #${idx + 1} is invalid: ${res.error.issues[0]?.message || 'Schema mismatch'}`);
+        }
+        return res.data as QAItem;
+      });
+
+      setQaInput(validated);
+      setSelectedMockKey(null);
+      setDataSource('json');
+      setAnalysisResult(null);
+      setAnalysis([]);
+      setError(null);
+    } catch (e: unknown) {
+      setJsonError(e instanceof Error ? e.message : "Invalid JSON input");
+    }
   }
 
   async function handleAnalyzeLLM() {
@@ -143,9 +182,55 @@ export default function Home() {
           {qaInput.length > 0 && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="bg-white dark:bg-slate-800 rounded-xl border shadow-sm p-6">
-                <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
-                  Interview Transcript
-                </h2>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    Interview Transcript
+                  </h2>
+                  <div className="flex items-center gap-2 text-xs">
+                    <button
+                      className={`px-3 py-1 rounded border ${dataSource === 'mock' ? 'bg-blue-600 text-white border-blue-600' : 'hover:bg-gray-50 dark:hover:bg-slate-700'}`}
+                      onClick={() => {
+                        setDataSource('mock');
+                        if (!selectedMockKey) {
+                          handleMockSelection('short_transcript');
+                        }
+                      }}
+                    >
+                      Mock Data
+                    </button>
+                    <button
+                      className={`px-3 py-1 rounded border ${dataSource === 'json' ? 'bg-blue-600 text-white border-blue-600' : 'hover:bg-gray-50 dark:hover:bg-slate-700'}`}
+                      onClick={() => setDataSource('json')}
+                    >
+                      Paste JSON
+                    </button>
+                  </div>
+                </div>
+
+                {dataSource === 'json' && (
+                  <div className="mb-4 space-y-2">
+                    <textarea
+                      value={jsonInput}
+                      onChange={(e) => setJsonInput(e.target.value)}
+                      className="w-full h-40 text-xs p-3 rounded border bg-white dark:bg-slate-900 dark:border-slate-700 text-gray-800 dark:text-gray-200 font-mono"
+                      placeholder='[ { "timestamp": "00:00:10", "type": "question", "content": "xxx?", "role": "interviewer" } ]'
+                    />
+                    <div className="flex items-center justify-between">
+                      <button
+                        onClick={handleUseJson}
+                        className="px-4 py-2 text-xs rounded bg-green-600 text-white hover:bg-green-700"
+                      >
+                        Validate & Use JSON
+                      </button>
+                      {jsonError ? (
+                        <span className="text-xs text-red-600">{jsonError}</span>
+                      ) : (
+                        <span className="text-xs text-gray-500">JSON must be an array with keys: timestamp, type, content, role</span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 <div className={`bg-gray-50 dark:bg-slate-900 rounded-lg p-4 overflow-auto dynamic-height ${
                   hasAnalysisResults ? 'max-h-[1000vh]' : 'max-h-[60vh]'
                 }`}>

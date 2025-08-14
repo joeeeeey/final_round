@@ -2,64 +2,64 @@ interface OverallSummaryProps {
   summary: string;
 }
 
-interface ScoreMetric {
-  name: string;
-  score: number;
-  icon: string;
-  color: string;
-}
+// interface ScoreMetric {
+//   name: string;
+//   score: number;
+//   icon: string;
+//   color: string;
+// }
 
 export default function OverallSummary({ summary }: OverallSummaryProps) {
   // Extract key metrics from summary text (simple keyword analysis)
-  const extractScores = (text: string): ScoreMetric[] => {
-    const metrics = [
-      { 
-        name: "Technical Skills", 
-        icon: "⚙️", 
-        color: "from-blue-500 to-cyan-500",
-        keywords: ["technical", "technology", "solution", "implementation", "problem-solving"]
-      },
-      { 
-        name: "Communication", 
-        icon: "💬", 
-        color: "from-green-500 to-emerald-500",
-        keywords: ["articulated", "explained", "communication", "clear", "described"]
-      },
-      { 
-        name: "Experience", 
-        icon: "📈", 
-        color: "from-purple-500 to-violet-500",
-        keywords: ["experience", "years", "background", "worked", "previous"]
-      },
-      { 
-        name: "Problem Solving", 
-        icon: "🧩", 
-        color: "from-orange-500 to-amber-500",
-        keywords: ["problem", "challenge", "solved", "solution", "approach"]
-      }
-    ];
+  // const extractScores = (text: string): ScoreMetric[] => {
+  //   const metrics = [
+  //     { 
+  //       name: "Technical Skills", 
+  //       icon: "⚙️", 
+  //       color: "from-blue-500 to-cyan-500",
+  //       keywords: ["technical", "technology", "solution", "implementation", "problem-solving"]
+  //     },
+  //     { 
+  //       name: "Communication", 
+  //       icon: "💬", 
+  //       color: "from-green-500 to-emerald-500",
+  //       keywords: ["articulated", "explained", "communication", "clear", "described"]
+  //     },
+  //     { 
+  //       name: "Experience", 
+  //       icon: "📈", 
+  //       color: "from-purple-500 to-violet-500",
+  //       keywords: ["experience", "years", "background", "worked", "previous"]
+  //     },
+  //     { 
+  //       name: "Problem Solving", 
+  //       icon: "🧩", 
+  //       color: "from-orange-500 to-amber-500",
+  //       keywords: ["problem", "challenge", "solved", "solution", "approach"]
+  //     }
+  //   ];
 
-    return metrics.map(metric => {
-      const lowerText = text.toLowerCase();
-      const matchCount = metric.keywords.reduce((count, keyword) => {
-        return count + (lowerText.includes(keyword) ? 1 : 0);
-      }, 0);
+  //   return metrics.map(metric => {
+  //     const lowerText = text.toLowerCase();
+  //     const matchCount = metric.keywords.reduce((count, keyword) => {
+  //       return count + (lowerText.includes(keyword) ? 1 : 0);
+  //     }, 0);
       
-      // Convert match count to score (0-100), with some randomization for demo
-      const baseScore = Math.min(matchCount * 20, 80);
-      const finalScore = Math.min(baseScore + Math.floor(Math.random() * 20), 95);
+  //     // Convert match count to score (0-100), with some randomization for demo
+  //     const baseScore = Math.min(matchCount * 20, 80);
+  //     const finalScore = Math.min(baseScore + Math.floor(Math.random() * 20), 95);
       
-      return {
-        name: metric.name,
-        score: finalScore,
-        icon: metric.icon,
-        color: metric.color
-      };
-    });
-  };
+  //     return {
+  //       name: metric.name,
+  //       score: finalScore,
+  //       icon: metric.icon,
+  //       color: metric.color
+  //     };
+  //   });
+  // };
 
-  const scores = extractScores(summary);
-  const averageScore = scores.reduce((sum, metric) => sum + metric.score, 0) / scores.length;
+  // const scores = extractScores(summary);
+  // const averageScore = scores.reduce((sum, metric) => sum + metric.score, 0) / scores.length;
 
   // Extract key sentiment words
   const extractKeywords = (text: string): string[] => {

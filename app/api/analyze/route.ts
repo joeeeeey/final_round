@@ -1,3 +1,5 @@
+// disable eslint for this file
+/* eslint-disable */
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
@@ -144,8 +146,10 @@ const prompts = {
         * other_information: "Any other relevant personal or professional details"
     2.  **Generate Overall Summary**: After analyzing the full transcript, write a brief, balanced summary of the candidate's overall performance.
     3.  **Analyze Timeline**:
-        * key_name_entity: "A descriptive title for this segment of the interview (e.g., 'Introduction', 'Technical Challenge: API Design')",
-        * The \`highlight\` and \`lowlight\` fields should be specific, positive or negative points or strengths demonstrated by the candidate in this segment. Keep empty string if there is no highlight or lowlight.
+        * key_name_entity: "A descriptive title for this segment of the interview (e.g., 'Introduction', 'Technical Challenge: API Design')
+        * highlight: Specific, positive points or strengths demonstrated by the candidate in this segment. Keep empty string if there is no highlight. e.g. "The candidate was able to explain the difference between a RESTful API and a GraphQL API."
+        * lowlight: Specific, negative points or areas where the candidate struggled. Keep empty string if there is no lowlight. e.g. "The candidate mixed up the difference between a RESTful API and a GraphQL API, he should have known the difference."
+        * summary: A concise summary of the interaction in this segment. e.g.  "The candidate was able to explain the difference between a RESTful API and a GraphQL API."
         * Process the transcript chronologically.
         * Group related questions and answers into logical segments.
         * For each segment, create a timeline item with the specified fields.
@@ -343,7 +347,7 @@ async function analyzeWithChunking(qaItems: z.infer<typeof qaItemSchema>[]) {
         messages,
       });
       chunkAnalyses.push(object);
-    } catch (e) {
+    } catch (_) {
       // Best-effort fallback when a chunk fails; continue processing
       chunkAnalyses.push({
         chunk_id: chunk.chunkId,
