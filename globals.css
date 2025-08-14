@@ -29,6 +29,11 @@
   transition: width 1s ease-out;
 }
 
+/* Dynamic height transitions */
+.dynamic-height {
+  transition: max-height 0.5s ease-in-out;
+}
+
 /* Custom gradient border for timeline */
 .timeline-border {
   background: linear-gradient(to bottom, #a855f7, #ec4899);

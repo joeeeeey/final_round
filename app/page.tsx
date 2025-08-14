@@ -19,6 +19,9 @@ export default function Home() {
   const [selectedMockKey, setSelectedMockKey] = useState<MockTranscriptOption['key'] | null>(null);
 
   const qaPreview = useMemo(() => JSON.stringify(qaInput, null, 2), [qaInput]);
+  
+  // Check if we have any analysis results for dynamic height
+  const hasAnalysisResults = Boolean(analysisResult || analysis.length > 0);
 
   function handleMockSelection(key: MockTranscriptOption['key']) {
     const selectedData = mockTranscriptData[key];
@@ -134,7 +137,17 @@ export default function Home() {
                 <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
                   Interview Transcript
                 </h2>
-                <div className="bg-gray-50 dark:bg-slate-900 rounded-lg p-4 max-h-96 overflow-auto">
+                <div className={`bg-gray-50 dark:bg-slate-900 rounded-lg p-4 overflow-auto dynamic-height ${
+                  hasAnalysisResults ? 'max-h-[160vh]' : 'max-h-[60vh]'
+                }`}>
+                  {/* Debug info - remove in production */}
+                  {/* {process.env.NODE_ENV === 'development' && (
+                    <div className="text-xs text-blue-500 mb-2">
+                      Debug: hasAnalysisResults = {hasAnalysisResults.toString()}, 
+                      analysisResult = {Boolean(analysisResult).toString()}, 
+                      analysis.length = {analysis.length}
+                    </div>
+                  )} */}
                   <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                     {qaPreview}
                   </pre>
