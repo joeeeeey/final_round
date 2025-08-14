@@ -171,7 +171,7 @@ export const mockTranscriptOptions: MockTranscriptOption[] = [
     description: 'Frontend Developer Interview',
     role: 'Frontend Developer',
     duration: '~6 minutes',
-    questionCount: 6
+    questionCount: 3
   },
   {
     key: 'long_transcript', 
@@ -179,7 +179,7 @@ export const mockTranscriptOptions: MockTranscriptOption[] = [
     description: 'DevOps Engineer Interview',
     role: 'DevOps Engineer', 
     duration: '~16 minutes',
-    questionCount: 12
+    questionCount: 10
   }
 ];
 
