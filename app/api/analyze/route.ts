@@ -53,7 +53,6 @@ export async function POST(req: Request) {
     }
 
     const parse = z.array(qaItemSchema).safeParse(json);
-    console.log('parse: ', parse);
     if (!parse.success) {
       return NextResponse.json(
         { error: "Invalid input", details: parse.error.format() },
@@ -146,11 +145,8 @@ export async function POST(req: Request) {
         qaItems
       )}`,
     });
-
-    console.log('messages: ', messages);
     // return
      const modelId = "google/gemini-2.5-flash-lite-preview-06-17"
-     console.log('analysisSchema: ', analysisSchema);
      const { object } = await generateObject({
        model: openrouter(modelId),
        schema: analysisSchema,
@@ -158,7 +154,6 @@ export async function POST(req: Request) {
       messages: messages as ModelMessage[],
     });
 
-    console.log('object: ', object);
     
     return NextResponse.json(object, { status: 200 });
   } catch (err: unknown) {
