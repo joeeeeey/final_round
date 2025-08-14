@@ -32,6 +32,21 @@ export interface AnalysisResult {
   timeline: TimelineItem[];
 }
 
+// Mock transcript data structure
+export interface MockTranscriptData {
+  short_transcript: QAItem[];
+  long_transcript: QAItem[];
+}
+
+export interface MockTranscriptOption {
+  key: keyof MockTranscriptData;
+  title: string;
+  description: string;
+  role: string;
+  duration: string;
+  questionCount: number;
+}
+
 // Keep the old interface for backward compatibility
 export interface AnalysisItem {
   timestamp: string;
