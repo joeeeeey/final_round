@@ -41,19 +41,19 @@ export const mockTranscriptData: MockTranscriptData = {
   ],
   "long_transcript": [
     {
-      "timestamp": "00:00:15",
+      "timestamp": "00:00:08",
       "type": "question",
       "content": "Hi Alex, thanks for coming in. To get started, could you please give us a brief self-introduction?",
       "role": "interviewer"
     },
     {
-      "timestamp": "00:00:35",
+      "timestamp": "00:00:09",
       "type": "answer",
       "content": "Sure, no problem. You can call me Alex. I graduated from Stanford with a degree in Computer Science about 8 years ago. I've been working in infrastructure engineering ever since, focusing on building scalable and resilient systems on AWS. For the past five years, my work has been centered around cloud-native technologies, especially Kubernetes and Terraform.",
       "role": "interviewee"
     },
     {
-      "timestamp": "00:00:15",
+      "timestamp": "00:00:20",
       "type": "question",
       "content": "Hi Alex, welcome. Before we dive into the technical details, could you tell me what specifically about this 'Strong Vibe Coder' role caught your attention?",
       "role": "interviewer"

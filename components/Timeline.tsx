@@ -1,11 +1,12 @@
-import { AnalysisItem, TimelineItem as TimelineItemType } from "@/types/interview";
+import { AnalysisItem, TimelineItem as TimelineItemType, QAItem } from "@/types/interview";
 import TimelineItem from "@/components/TimelineItem";
 
 interface TimelineProps {
   items: AnalysisItem[] | TimelineItemType[];
+  qaLookup?: Record<string, QAItem>;
 }
 
-export default function Timeline({ items }: TimelineProps) {
+export default function Timeline({ items, qaLookup }: TimelineProps) {
   if (!items?.length) {
     return (
       <div className="text-center py-8">
@@ -37,6 +38,7 @@ export default function Timeline({ items }: TimelineProps) {
             key={`${item.timestamp}-${item.key_name_entity}`} 
             item={item} 
             isLast={index === items.length - 1}
+            qaLookup={qaLookup}
           />
         ))}
       </ol>

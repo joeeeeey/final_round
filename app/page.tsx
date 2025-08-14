@@ -20,6 +20,15 @@ export default function Home() {
 
   const qaPreview = useMemo(() => JSON.stringify(qaInput, null, 2), [qaInput]);
   
+  // Build timestamp -> QAItem lookup for reference popovers
+  const qaLookup = useMemo(() => {
+    const map: Record<string, QAItem> = {};
+    for (const it of qaInput) {
+      map[it.timestamp] = it;
+    }
+    return map;
+  }, [qaInput]);
+  
   // Check if we have any analysis results for dynamic height
   const hasAnalysisResults = Boolean(analysisResult || analysis.length > 0);
 
@@ -168,7 +177,7 @@ export default function Home() {
                   <div className="space-y-6">
                     <BasicInformation basicInfo={analysisResult.basic_information} />
                     <OverallSummary summary={analysisResult.overall_summary} />
-                    <Timeline items={analysisResult.timeline} />
+                    <Timeline items={analysisResult.timeline} qaLookup={qaLookup} />
                   </div>
                 )}
 
@@ -180,7 +189,7 @@ export default function Home() {
                         📝 <strong>Legacy Format:</strong> This is the old analysis format. Use the LLM analysis for enhanced insights.
                       </p>
                     </div>
-                    <Timeline items={analysis} />
+                    <Timeline items={analysis} qaLookup={qaLookup} />
                   </div>
                 )}
 

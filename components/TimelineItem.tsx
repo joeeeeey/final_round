@@ -1,11 +1,13 @@
-import { AnalysisItem, TimelineItem as TimelineItemType } from "@/types/interview";
+import { AnalysisItem, TimelineItem as TimelineItemType, QAItem } from "@/types/interview";
+import ReferencePopover from "@/components/ReferencePopover";
 
 interface TimelineItemProps {
   item: AnalysisItem | TimelineItemType;
   isLast?: boolean;
+  qaLookup?: Record<string, QAItem>;
 }
 
-export default function TimelineItem({ item, isLast = false }: TimelineItemProps) {
+export default function TimelineItem({ item, isLast = false, qaLookup }: TimelineItemProps) {
   // Determine the color theme based on the presence of highlights/lowlights
   const getThemeColor = () => {
     if (item.highlight && !item.lowlight) return "green"; // Positive
@@ -99,21 +101,9 @@ export default function TimelineItem({ item, isLast = false }: TimelineItemProps
           </div>
 
           {/* References */}
-          {"timestamp_ref" in item && item.timestamp_ref?.length > 0 && (
+          {"timestamp_ref" in item && item.timestamp_ref?.length > 0 && qaLookup && (
             <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-600">
-              <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
-                🔗 References:
-              </span>
-              <div className="flex flex-wrap gap-1">
-                {item.timestamp_ref.map((ref, index) => (
-                  <span 
-                    key={index}
-                    className="px-2 py-0.5 bg-gray-100 dark:bg-gray-600 text-gray-600 dark:text-gray-400 text-xs rounded"
-                  >
-                    {ref}
-                  </span>
-                ))}
-              </div>
+              <ReferencePopover timestamps={item.timestamp_ref} lookup={qaLookup} />
             </div>
           )}
         </div>
