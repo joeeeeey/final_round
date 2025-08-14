@@ -138,16 +138,8 @@ export default function Home() {
                   Interview Transcript
                 </h2>
                 <div className={`bg-gray-50 dark:bg-slate-900 rounded-lg p-4 overflow-auto dynamic-height ${
-                  hasAnalysisResults ? 'max-h-[160vh]' : 'max-h-[60vh]'
+                  hasAnalysisResults ? 'max-h-[1000vh]' : 'max-h-[60vh]'
                 }`}>
-                  {/* Debug info - remove in production */}
-                  {/* {process.env.NODE_ENV === 'development' && (
-                    <div className="text-xs text-blue-500 mb-2">
-                      Debug: hasAnalysisResults = {hasAnalysisResults.toString()}, 
-                      analysisResult = {Boolean(analysisResult).toString()}, 
-                      analysis.length = {analysis.length}
-                    </div>
-                  )} */}
                   <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
                     {qaPreview}
                   </pre>

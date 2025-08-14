@@ -92,48 +92,7 @@ export default function OverallSummary({ summary }: OverallSummaryProps) {
         </div>
       </div>
 
-      {/* Overall Score */}
-      <div className="bg-white dark:bg-slate-700 rounded-lg p-4 mb-6 border-l-4 border-green-500">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Overall Score
-          </span>
-          <span className="text-2xl font-bold text-green-600 dark:text-green-400">
-            {Math.round(averageScore)}%
-          </span>
-        </div>
-        <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-          <div 
-            className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full progress-bar"
-            style={{ width: `${averageScore}%` }}
-          ></div>
-        </div>
-      </div>
 
-      {/* Score Breakdown */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        {scores.map((metric, index) => (
-          <div key={index} className="bg-white/50 dark:bg-slate-700/50 rounded-lg p-3">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-lg">{metric.icon}</span>
-              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
-                {metric.name}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 bg-gray-200 dark:bg-gray-600 rounded-full h-1.5">
-                <div 
-                  className={`bg-gradient-to-r ${metric.color} h-1.5 rounded-full progress-bar`}
-                  style={{ width: `${metric.score}%` }}
-                ></div>
-              </div>
-              <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-                {metric.score}%
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
 
       {/* Key Strengths */}
       {keywords.length > 0 && (
